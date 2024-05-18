@@ -1,0 +1,41 @@
+There is two types of software design pattern:
+a> MVC(Models Views Controllers)
+b> Module system
+
+
+MVC(Models Views Controllers) CONSISTS OF:
+#Interfaces:
+#Routes:
+#Models:
+#Views:
+    ->template engine:
+                    *ejs
+                    *handlebars
+                    *pugs
+    ->Library/framework:
+                    *React
+                    *View 
+                    *Angular
+
+
+#Controllers:
+
+
+----------
+MODULAR SYSTEM:
+**rules
+    ->DRY (dont repeat yourself)
+    ->Fat Model/ Thin Controller
+
+In order to use moduler pattern using js you have to follow some steps:
+    1.create a schema
+    2.create a database Model
+    3.Database query
+
+
+In order to use moduler pattern using Ts you have to follow some steps:
+    1.create Interface
+    2.create schema
+    3.create Database Model
+    4.create Database query
+    
