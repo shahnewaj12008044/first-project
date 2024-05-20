@@ -3,6 +3,7 @@ import {
   Guardian,
   LocalGuardian,
   Student,
+  
   UserName,
 } from "./student.interface";
 
@@ -52,3 +53,6 @@ const studentSchema = new Schema<Student>({
   profileImage: { type: String },
   isActive: ["active", "blocked"],
 });
+
+
+export const StudentModel = model<Student>('Student',studentSchema)
