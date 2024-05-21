@@ -1,4 +1,3 @@
-import { Schema, model, connect } from "mongoose";
 //step-1: create an interface (line 4-40)
 //step-2 create a schema()
 export type Guardian = {
@@ -36,7 +35,6 @@ export type Student = {
   permanentAdress: string;
   guardian: Guardian;
   localGuardian: LocalGuardian;
-  profileImage?:string;
-  isActive: 'active' | 'blocked';
+  profileImage?: string;
+  isActive: "active" | "blocked";
 };
-
