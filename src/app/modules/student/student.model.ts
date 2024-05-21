@@ -57,7 +57,10 @@ const studentSchema = new Schema<Student>({
   guardian: guardianSchema,
   localGuardian: localGuardianSchema,
   profileImage: { type: String },
-  isActive: ["active", "blocked"],
+  isActive: {type:String,
+    enum:["active", "blocked"],
+    required: true
+  },
 });
 
 export const StudentModel = model<Student>("Student", studentSchema);
