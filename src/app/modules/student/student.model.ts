@@ -39,12 +39,19 @@ const localGuardianSchema = new Schema<LocalGuardian>({
 const studentSchema = new Schema<Student>({
   id: { type: String },
   name: userNameSchema,
-  gender: ["male", "female"], //its called enum
+  gender: {
+    type: String,
+    enum: ["male", "female"],
+    required: true,
+  }, //its called enum
   dateOfBirth: { type: String },
   email: { type: String, required: true },
   contactNo: { type: String, required: true },
   emergencyContactNo: { type: String, required: true },
-  BloodGroup: ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"],
+  BloodGroup: {
+    type: String,
+    enum: ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"],
+  },
   presentAdress: { type: String, required: true },
   permanentAdress: { type: String, required: true },
   guardian: guardianSchema,
