@@ -14,14 +14,14 @@ const userNameSchema = new Schema<UserName>({
     required: [true, "First Name is required"],
     trim: true,
     maxlength: [20, "First name can not be more than 20 character"], //built-in validator
-    validate: {
-      //custom validator
-      validator: function (value: String) {
-        const firstName = value.charAt(0).toUpperCase() + value.slice(1); //Mezba
-        return firstName === value;
-      },
-      message: "{VALUE} is not in capitalize format",
-    },
+    // validate: {
+    //   //custom validator
+    //   validator: function (value: String) {
+    //     const firstName = value.charAt(0).toUpperCase() + value.slice(1); //Mezba
+    //     return firstName === value;
+    //   },
+    //   message: "{VALUE} is not in capitalize format",
+    // },
   },
   middleName: {
     type: String,
