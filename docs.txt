@@ -77,3 +77,9 @@ there is several types of middlewires in mongoose:
 2.Aggreagation middlewires:
     ->schema.pre('aggregate',func)
     ->schema.post('aggregate',func)
+
+3.Query middlewires:
+    ->schema.pre('find',func)
+    ->schema.post('find',func)
+    ->schema.pre('findOne',func)
+    ->schema.post('findOne',func)

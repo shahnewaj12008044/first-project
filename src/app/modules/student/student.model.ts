@@ -9,7 +9,7 @@ import {
   TUserName,
   //StudentMethods,
 } from "./student.interface";
-import bcrypt from 'bcrypt'
+import bcrypt from "bcrypt";
 import { kMaxLength } from "buffer";
 import config from "../../config";
 
@@ -78,7 +78,12 @@ const localGuardianSchema = new Schema<TLocalGuardian>({
 
 const studentSchema = new Schema<TStudent, StudentModel>({
   id: { type: String, trim: true, required: true, unique: true },
-  password: { type: String, trim: true, required: true, unique: true,kMaxLength:[20,"password cant be more than 20 chars"] },
+  password: {
+    type: String,
+    trim: true,
+    required: true,
+    kMaxLength: [20, "password cant be more than 20 chars"],
+  },
   name: {
     type: userNameSchema,
     required: [true, "Name is required"],
@@ -136,24 +141,45 @@ const studentSchema = new Schema<TStudent, StudentModel>({
     },
     required: true,
   },
+  isDeleted: {
+    type: Boolean,
+    default: false,
+  },
 });
 
-
-//pre save middlewire/hooks:will work on create() and save()
-studentSchema.pre('save',async function(next){
-  // console.log(this,"pre: we will save data")
+//pre save middleware/hooks:will work on create() and save()
+studentSchema.pre("save", async function (next) {
   //hashing password and save into DB:
-  const user = this;//crurrent processed document
-  user.password = await bcrypt.hash(user.password,Number(config.bcrypt_salt_rounds));
-  next()
+  const user = this; //crurrent processed document
+  user.password = await bcrypt.hash(
+    user.password,
+    Number(config.bcrypt_salt_rounds)
+  );
+  next();
+});
 
-})
+//post save middleware/hooks:
+studentSchema.post("save", function (doc, next) {
+  doc.password = "";
+  next();
+});
 
-//post save middlewire/hooks:
-studentSchema.post('save',function(){
-  console.log(this,"post: the data is saved")
-})
-
+//Query middleware:
+studentSchema.pre("find", function (next) {
+  // console.log(this)
+  this.find({ isDeleted: { $ne: true } });
+  next();
+});
+studentSchema.pre("findOne", function (next) {
+  // console.log(this)
+  this.find({ isDeleted: { $ne: true } });
+  next();
+});
+studentSchema.pre("aggregate", function (next) {
+  // console.log(this)
+  this.pipeline().unshift({$match:{isDeleted:{$ne:true}}})
+  next();
+});
 
 //creating a custom static method
 studentSchema.statics.isUserExists = async function (id: string) {
