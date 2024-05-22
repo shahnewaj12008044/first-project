@@ -10,7 +10,6 @@ import {
   //StudentMethods,
 } from "./student.interface";
 import bcrypt from "bcrypt";
-import { kMaxLength } from "buffer";
 import config from "../../config";
 
 //username schema
@@ -154,9 +153,9 @@ const studentSchema = new Schema<TStudent, StudentModel>({
 //pre save middleware/hooks:will work on create() and save()
 studentSchema.pre("save", async function (next) {
   //hashing password and save into DB:
-  const user = this; //crurrent processed document
-  user.password = await bcrypt.hash(
-    user.password,
+   //crurrent processed document
+  this.password = await bcrypt.hash(
+    this.password,
     Number(config.bcrypt_salt_rounds)
   );
   next();
