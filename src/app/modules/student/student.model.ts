@@ -145,6 +145,10 @@ const studentSchema = new Schema<TStudent, StudentModel>({
     type: Boolean,
     default: false,
   },
+},{
+  toJSON:{
+    virtuals:true
+  }
 });
 
 //pre save middleware/hooks:will work on create() and save()
@@ -180,6 +184,13 @@ studentSchema.pre("aggregate", function (next) {
   this.pipeline().unshift({$match:{isDeleted:{$ne:true}}})
   next();
 });
+
+//virtual
+studentSchema.virtual('fullName').get(function(){
+  return (`${this.name.firstName}  ${this.name.middleName}  ${this.name.lastName}`)
+})
+
+
 
 //creating a custom static method
 studentSchema.statics.isUserExists = async function (id: string) {
