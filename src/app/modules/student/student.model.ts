@@ -9,6 +9,9 @@ import {
   TUserName,
   //StudentMethods,
 } from "./student.interface";
+import bcrypt from 'bcrypt'
+import { kMaxLength } from "buffer";
+import config from "../../config";
 
 //username schema
 const userNameSchema = new Schema<TUserName>({
@@ -75,6 +78,7 @@ const localGuardianSchema = new Schema<TLocalGuardian>({
 
 const studentSchema = new Schema<TStudent, StudentModel>({
   id: { type: String, trim: true, required: true, unique: true },
+  password: { type: String, trim: true, required: true, unique: true,kMaxLength:[20,"password cant be more than 20 chars"] },
   name: {
     type: userNameSchema,
     required: [true, "Name is required"],
@@ -134,6 +138,24 @@ const studentSchema = new Schema<TStudent, StudentModel>({
   },
 });
 
+
+//pre save middlewire/hooks:will work on create() and save()
+studentSchema.pre('save',async function(next){
+  // console.log(this,"pre: we will save data")
+  //hashing password and save into DB:
+  const user = this;//crurrent processed document
+  user.password = await bcrypt.hash(user.password,Number(config.bcrypt_salt_rounds));
+  next()
+
+})
+
+//post save middlewire/hooks:
+studentSchema.post('save',function(){
+  console.log(this,"post: the data is saved")
+})
+
+
+//creating a custom static method
 studentSchema.statics.isUserExists = async function (id: string) {
   const existingUser = await Student.findOne({ id });
   return existingUser;

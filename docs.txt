@@ -62,3 +62,18 @@ studentSchema.methods.isUserExist = async function(id: string) =>{
 
 const student = new StudentModel()
 student.isUserExist('2342')
+
+MIDDLEWIRE IN MONGOOSE:
+
+mongoose middlewires are called mongoose hooks also 
+
+there is several types of middlewires in mongoose:
+1.Document middlewires:
+    ->schema.pre('save',func)//array function must be avoided
+    -schema.post('save',func)
+    ->schema.pre('remove',func)
+    ->schema.post('remove',func)
+
+2.Aggreagation middlewires:
+    ->schema.pre('aggregate',func)
+    ->schema.post('aggregate',func)
