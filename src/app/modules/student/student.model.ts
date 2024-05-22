@@ -1,12 +1,13 @@
 import { Schema, model } from "mongoose";
 import validator from "validator";
 import {
+  StudentModel,
   TGuardian,
   TLocalGuardian,
   TStudent,
-  StudentModel,
+  // StudentModel,
   TUserName,
-  StudentMethods,
+  //StudentMethods,
 } from "./student.interface";
 
 //username schema
@@ -69,7 +70,10 @@ const localGuardianSchema = new Schema<TLocalGuardian>({
   address: { type: String, required: [true, "Address is required"] },
 });
 
-const studentSchema = new Schema<TStudent, StudentModel, StudentMethods>({
+//**********for creating custom instace
+//const studentSchema = new Schema<TStudent, StudentModel, StudentMethods>
+
+const studentSchema = new Schema<TStudent, StudentModel>({
   id: { type: String, trim: true, required: true, unique: true },
   name: {
     type: userNameSchema,
@@ -130,9 +134,16 @@ const studentSchema = new Schema<TStudent, StudentModel, StudentMethods>({
   },
 });
 
-studentSchema.methods.isUserExists = async function (id: string) {
+studentSchema.statics.isUserExists = async function (id: string) {
   const existingUser = await Student.findOne({ id });
   return existingUser;
 };
+//*********creating a custom interface
+// studentSchema.methods.isUserExists = async function (id: string) {
+//   const existingUser = await Student.findOne({ id });
+//   return existingUser;
+// };
 
+//********for creating custom instance
+// export const Student = model<TStudent, StudentModel>("Student", studentSchema);
 export const Student = model<TStudent, StudentModel>("Student", studentSchema);
