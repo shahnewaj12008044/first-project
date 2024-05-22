@@ -38,4 +38,27 @@ In order to use moduler pattern using Ts you have to follow some steps:
     2.create schema
     3.create Database Model
     4.create Database query
-    
+
+
+STATIC METHOD VS INSTANCE METHOD IN MONGOOSE:
+
+in mongoose there is two method by default available 1. static mehtod 2. instance method 
+for example:
+for inserting data we used studentModel.create()//its an example of built-in static method
+
+in instance method it would be written as:
+const student = new StudentModel()
+student.save()
+
+
+if we want we can create custom static method usnig:
+ studentSchema.statics.isUserExist = async function(id: string) =>{
+    return await user.findOne({id})
+ } method
+and we can create custom instances using: 
+studentSchema.methods.isUserExist = async function(id: string) =>{
+    return await user.findOne({id})
+} 
+
+const student = new StudentModel()
+student.isUserExist('2342')
