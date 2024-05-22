@@ -1,4 +1,5 @@
 import { Schema, model } from "mongoose";
+import validator from "validator";
 import {
   Guardian,
   LocalGuardian,
@@ -11,24 +12,29 @@ const userNameSchema = new Schema<UserName>({
   firstName: {
     type: String,
     required: [true, "First Name is required"],
-    trim:true,
-    maxlength: [20, "First name can not be more than 20 character"],
-    validate:{
-      validator:function(value: String){
-        const firstName = value.charAt(0).toUpperCase() + value.slice(1)//Mezba
+    trim: true,
+    maxlength: [20, "First name can not be more than 20 character"], //built-in validator
+    validate: {
+      //custom validator
+      validator: function (value: String) {
+        const firstName = value.charAt(0).toUpperCase() + value.slice(1); //Mezba
         return firstName === value;
       },
-      message:"{VALUE} is not in capitalize format"
-    }
+      message: "{VALUE} is not in capitalize format",
+    },
   },
   middleName: {
     type: String,
-    trim:true,
+    trim: true,
   },
   lastName: {
     type: String,
     required: [true, "Last Name is required"],
-    trim:true,
+    trim: true,
+    validate: {
+      validator: (value: string) => validator.isAlpha(value),
+      message: "{VALUE} is not valid",
+    },
   },
 });
 
@@ -40,9 +46,17 @@ const guardianSchema = new Schema<Guardian>({
     type: String,
     required: [true, "Contact number is required"],
   },
-  motherName: { type: String,trim:true, required: [true, "Mother Name is required"] },
-  motherOccupation: { type: String,trim:true },
-  motherContactNo: { type: String, trim:true,required: [true, "Contact No is required"] },
+  motherName: {
+    type: String,
+    trim: true,
+    required: [true, "Mother Name is required"],
+  },
+  motherOccupation: { type: String, trim: true },
+  motherContactNo: {
+    type: String,
+    trim: true,
+    required: [true, "Contact No is required"],
+  },
 });
 
 //LocalGuardian schema;
@@ -54,7 +68,7 @@ const localGuardianSchema = new Schema<LocalGuardian>({
 });
 
 const studentSchema = new Schema<Student>({
-  id: { type: String,trim:true, required: true, unique: true },
+  id: { type: String, trim: true, required: true, unique: true },
   name: {
     type: userNameSchema,
     required: [true, "Name is required"],
@@ -68,7 +82,15 @@ const studentSchema = new Schema<Student>({
     required: true,
   }, //its called enum
   dateOfBirth: { type: String },
-  email: { type: String, required: [true, "Email  is required"], unique: true },
+  email: {
+    type: String,
+    required: [true, "Email  is required"],
+    unique: true,
+    validate: {
+      validator: (value: string) => validator.isEmail(value),
+      message: "{VALUE} is not a valid email type",
+    },
+  },
   contactNo: { type: String, required: [true, "Contact no is required"] },
   emergencyContactNo: {
     type: String,

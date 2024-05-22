@@ -1,11 +1,22 @@
 import { studentServices } from "./student.service";
 import { Request, Response } from "express";
+import studentValidationSchema from "./student.validation";
 
 //insert student data controller
 const createStudent = async (req: Request, res: Response) => {
   try {
-    const { student: studentData } = req.body;
+    //creating a schema validation using joi
 
+    const { student: studentData } = req.body;
+    const { error, value } = studentValidationSchema.validate(studentData);
+    // console.log(error,value)
+    if (error) {
+      res.status(500).json({
+        success: false,
+        message: "something went wrong",
+        error: error.details,
+      });
+    }
     //will call service func to get this data
     const result = await studentServices.createStudentIntoDB(studentData);
     //send response
@@ -15,8 +26,12 @@ const createStudent = async (req: Request, res: Response) => {
       message: "student is created successfully",
       data: result,
     });
-  } catch (error) {
-    console.log(error);
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      message: "something went wrong",
+      error: err,
+    });
   }
 };
 
@@ -30,8 +45,12 @@ const getAllStudents = async (req: Request, res: Response) => {
       message: "Students data are retrieved successfully.",
       data: result,
     });
-  } catch (error) {
-    console.log(error);
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      message: "something went wrong",
+      error: err,
+    });
   }
 };
 
@@ -46,8 +65,12 @@ const getAstudent = async (req: Request, res: Response) => {
       message: "sutdent is retrived successfully",
       data: result,
     });
-  } catch (error) {
-    console.log(error);
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      message: "something went wrong",
+      error: err,
+    });
   }
 };
 
